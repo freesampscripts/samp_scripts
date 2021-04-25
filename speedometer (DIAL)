@@ -5,8 +5,8 @@
 new Float:pSpeed[MAX_PLAYERS] = {-0.1,...};
 
 new Text:TD[15];
-new PlayerText:pTD[MAX_PLAYERS] = {PlayerText:0xFFFF};
-new PlayerText:pTD2[MAX_PLAYERS] = {PlayerText:0xFFFF};
+new PlayerText:pTD[MAX_PLAYERS] = {PlayerText:0xFFFF,...};
+new PlayerText:pTD2[MAX_PLAYERS] = {PlayerText:0xFFFF,...};
 
 Float:GetSpeed(playerid)
 {
