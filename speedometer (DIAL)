@@ -1,0 +1,316 @@
+#include <a_samp>
+#include <foreach>
+#include <YSI\y_timers>
+
+new Float:pSpeed[MAX_PLAYERS] = {0.0,...};
+
+new Text:TD[15];
+new PlayerText:pTD[MAX_PLAYERS] = {PlayerText:0xFFFF};
+new PlayerText:pTD2[MAX_PLAYERS] = {PlayerText:0xFFFF};
+
+Float:GetSpeed(playerid)
+{
+	new vehicle, Float:x, Float:y, Float:z;
+	vehicle = GetPlayerVehicleID(playerid);
+	GetVehicleVelocity(vehicle, x, y, z);
+	return floatsqroot(floatpower(x, 2) + floatpower(y, 2))*180.0;
+}
+
+Float:calcrot(playerid)
+{
+	new Float:result = 135.0, Float:speed;
+	speed = GetSpeed(playerid);
+	result -= speed*(270.0/220.0);
+	if(result < -135.0)
+	{
+	    result = -135.0;
+	}
+	return result;
+}
+
+bool:TogglePlayerSpeedo(playerid, bool:toggle)
+{
+	if(!toggle)
+	{
+	    for(new i = 0; i < 15; i++)
+		{
+		    TextDrawHideForPlayer(playerid, TD[i]);
+		}
+		PlayerTextDrawHide(playerid, pTD[playerid]);
+		PlayerTextDrawHide(playerid, pTD2[playerid]);
+		return false;
+	}
+	for(new i = 0; i < 15; i++)
+	{
+	    TextDrawShowForPlayer(playerid, TD[i]);
+	}
+	PlayerTextDrawSetPreviewRot(playerid, pTD[playerid], 0.000000, calcrot(playerid), 0.000000, 3.000000);
+	PlayerTextDrawShow(playerid, pTD[playerid]);
+	PlayerTextDrawShow(playerid, pTD2[playerid]);
+	return false;
+}
+
+public OnFilterScriptInit()
+{
+    TD[0] = TextDrawCreate(551.857604, 336.586212, "hud:radardisc");
+	TextDrawTextSize(TD[0], 35.000000, 35.000000);
+	TextDrawAlignment(TD[0], 1);
+	TextDrawColor(TD[0], -1);
+	TextDrawSetShadow(TD[0], 0);
+	TextDrawBackgroundColor(TD[0], 255);
+	TextDrawFont(TD[0], 4);
+	TextDrawSetProportional(TD[0], 0);
+	TD[1] = TextDrawCreate(621.759094, 336.586212, "hud:radardisc");
+	TextDrawTextSize(TD[1], -35.000000, 35.000000);
+	TextDrawAlignment(TD[1], 1);
+	TextDrawColor(TD[1], -1);
+	TextDrawSetShadow(TD[1], 0);
+	TextDrawBackgroundColor(TD[1], 255);
+	TextDrawFont(TD[1], 4);
+	TextDrawSetProportional(TD[1], 0);
+	TD[2] = TextDrawCreate(551.857604, 406.185150, "hud:radardisc");
+	TextDrawTextSize(TD[2], 35.000000, -35.000000);
+	TextDrawAlignment(TD[2], 1);
+	TextDrawColor(TD[2], -1);
+	TextDrawSetShadow(TD[2], 0);
+	TextDrawBackgroundColor(TD[2], 255);
+	TextDrawFont(TD[2], 4);
+	TextDrawSetProportional(TD[2], 0);
+	TD[3] = TextDrawCreate(621.759094, 406.186859, "hud:radardisc");
+	TextDrawTextSize(TD[3], -35.000000, -35.000000);
+	TextDrawAlignment(TD[3], 1);
+	TextDrawColor(TD[3], -1);
+	TextDrawSetShadow(TD[3], 0);
+	TextDrawBackgroundColor(TD[3], 255);
+	TextDrawFont(TD[3], 4);
+	TextDrawSetProportional(TD[3], 0);
+	TD[4] = TextDrawCreate(566.000000, 385.000000, "0");
+	TextDrawLetterSize(TD[4], 0.244951, 0.900265);
+	TextDrawTextSize(TD[4], -10.000000, 0.000000);
+	TextDrawAlignment(TD[4], 1);
+	TextDrawColor(TD[4], -1);
+	TextDrawSetShadow(TD[4], 0);
+	TextDrawSetOutline(TD[4], 1);
+	TextDrawBackgroundColor(TD[4], 255);
+	TextDrawFont(TD[4], 1);
+	TextDrawSetProportional(TD[4], 1);
+	TD[5] = TextDrawCreate(558.476074, 374.246215, "20");
+	TextDrawLetterSize(TD[5], 0.244951, 0.900265);
+	TextDrawTextSize(TD[5], -10.000000, 0.000000);
+	TextDrawAlignment(TD[5], 1);
+	TextDrawColor(TD[5], -1);
+	TextDrawSetShadow(TD[5], 0);
+	TextDrawSetOutline(TD[5], 1);
+	TextDrawBackgroundColor(TD[5], 255);
+	TextDrawFont(TD[5], 1);
+	TextDrawSetProportional(TD[5], 1);
+	TD[6] = TextDrawCreate(556.475952, 364.245605, "40");
+	TextDrawLetterSize(TD[6], 0.244951, 0.900265);
+	TextDrawTextSize(TD[6], -10.000000, 0.000000);
+	TextDrawAlignment(TD[6], 1);
+	TextDrawColor(TD[6], -1);
+	TextDrawSetShadow(TD[6], 0);
+	TextDrawSetOutline(TD[6], 1);
+	TextDrawBackgroundColor(TD[6], 255);
+	TextDrawFont(TD[6], 1);
+	TextDrawSetProportional(TD[6], 1);
+	TD[7] = TextDrawCreate(560.076171, 353.444946, "60");
+	TextDrawLetterSize(TD[7], 0.244951, 0.900265);
+	TextDrawTextSize(TD[7], -10.000000, 0.000000);
+	TextDrawAlignment(TD[7], 1);
+	TextDrawColor(TD[7], -1);
+	TextDrawSetShadow(TD[7], 0);
+	TextDrawSetOutline(TD[7], 1);
+	TextDrawBackgroundColor(TD[7], 255);
+	TextDrawFont(TD[7], 1);
+	TextDrawSetProportional(TD[7], 1);
+	TD[8] = TextDrawCreate(568.276672, 345.644470, "80");
+	TextDrawLetterSize(TD[8], 0.244951, 0.900265);
+	TextDrawTextSize(TD[8], -10.000000, 0.000000);
+	TextDrawAlignment(TD[8], 1);
+	TextDrawColor(TD[8], -1);
+	TextDrawSetShadow(TD[8], 0);
+	TextDrawSetOutline(TD[8], 1);
+	TextDrawBackgroundColor(TD[8], 255);
+	TextDrawFont(TD[8], 1);
+	TextDrawSetProportional(TD[8], 1);
+	TD[9] = TextDrawCreate(578.681152, 340.871215, "110");
+	TextDrawLetterSize(TD[9], 0.244951, 0.900265);
+	TextDrawTextSize(TD[9], -10.000000, 0.000000);
+	TextDrawAlignment(TD[9], 1);
+	TextDrawColor(TD[9], -1);
+	TextDrawSetShadow(TD[9], 0);
+	TextDrawSetOutline(TD[9], 1);
+	TextDrawBackgroundColor(TD[9], 255);
+	TextDrawFont(TD[9], 1);
+	TextDrawSetProportional(TD[9], 1);
+	TD[10] = TextDrawCreate(591.977905, 344.171417, "140");
+	TextDrawLetterSize(TD[10], 0.244951, 0.900265);
+	TextDrawTextSize(TD[10], -10.000000, 0.000000);
+	TextDrawAlignment(TD[10], 1);
+	TextDrawColor(TD[10], -1);
+	TextDrawSetShadow(TD[10], 0);
+	TextDrawSetOutline(TD[10], 1);
+	TextDrawBackgroundColor(TD[10], 255);
+	TextDrawFont(TD[10], 1);
+	TextDrawSetProportional(TD[10], 1);
+	TD[11] = TextDrawCreate(598.076416, 352.671936, "160");
+	TextDrawLetterSize(TD[11], 0.244951, 0.900265);
+	TextDrawTextSize(TD[11], -10.000000, 0.000000);
+	TextDrawAlignment(TD[11], 1);
+	TextDrawColor(TD[11], -1);
+	TextDrawSetShadow(TD[11], 0);
+	TextDrawSetOutline(TD[11], 1);
+	TextDrawBackgroundColor(TD[11], 255);
+	TextDrawFont(TD[11], 1);
+	TextDrawSetProportional(TD[11], 1);
+	TD[12] = TextDrawCreate(602.038635, 363.591094, "180");
+	TextDrawLetterSize(TD[12], 0.244951, 0.900265);
+	TextDrawTextSize(TD[12], -10.000000, 0.000000);
+	TextDrawAlignment(TD[12], 1);
+	TextDrawColor(TD[12], -1);
+	TextDrawSetShadow(TD[12], 0);
+	TextDrawSetOutline(TD[12], 1);
+	TextDrawBackgroundColor(TD[12], 255);
+	TextDrawFont(TD[12], 1);
+	TextDrawSetProportional(TD[12], 1);
+	TD[13] = TextDrawCreate(599.139343, 373.891723, "200");
+	TextDrawLetterSize(TD[13], 0.244951, 0.900265);
+	TextDrawTextSize(TD[13], -10.000000, 0.000000);
+	TextDrawAlignment(TD[13], 1);
+	TextDrawColor(TD[13], -1);
+	TextDrawSetShadow(TD[13], 0);
+	TextDrawSetOutline(TD[13], 1);
+	TextDrawBackgroundColor(TD[13], 255);
+	TextDrawFont(TD[13], 1);
+	TextDrawSetProportional(TD[13], 1);
+	TD[14] = TextDrawCreate(592.276733, 384.897766, "220");
+	TextDrawLetterSize(TD[14], 0.244951, 0.900265);
+	TextDrawTextSize(TD[14], -10.000000, 0.000000);
+	TextDrawAlignment(TD[14], 1);
+	TextDrawColor(TD[14], -1);
+	TextDrawSetShadow(TD[14], 0);
+	TextDrawSetOutline(TD[14], 1);
+	TextDrawBackgroundColor(TD[14], 255);
+	TextDrawFont(TD[14], 1);
+	TextDrawSetProportional(TD[14], 1);
+	foreach(new i : Player)
+	{
+	    pTD[i] = CreatePlayerTextDraw(i, 533.190368, 323.583282, "");
+		PlayerTextDrawTextSize(i, pTD[i], 101.000000, 120.000000);
+		PlayerTextDrawAlignment(i, pTD[i], 1);
+		PlayerTextDrawColor(i, pTD[i], 0x000000FF);
+		PlayerTextDrawBackgroundColor(i, pTD[i], 0);
+		PlayerTextDrawSetShadow(i, pTD[i], 0);
+		PlayerTextDrawFont(i, pTD[i], 5);
+		PlayerTextDrawSetProportional(i, pTD[i], 0);
+		PlayerTextDrawSetPreviewModel(i, pTD[i], 19348);
+		PlayerTextDrawSetPreviewRot(i, pTD[i], 0.000000, 135.000000, 0.000000, 3.000000);
+		pTD2[i] = CreatePlayerTextDraw(i, 585.608947, 373.772430, "100");
+		PlayerTextDrawLetterSize(i, pTD2[i], 0.190095, 0.895999);
+		PlayerTextDrawTextSize(i, pTD2[i], 0.000000, 14.000000);
+		PlayerTextDrawAlignment(i, pTD2[i], 2);
+		PlayerTextDrawColor(i, pTD2[i], -1);
+		PlayerTextDrawUseBox(i, pTD2[i], 1);
+		PlayerTextDrawBoxColor(i, pTD2[i], 130);
+		PlayerTextDrawSetShadow(i, pTD2[i], 0);
+		PlayerTextDrawBackgroundColor(i, pTD2[i], 255);
+		PlayerTextDrawFont(i, pTD2[i], 1);
+		PlayerTextDrawSetProportional(i, pTD2[i], 1);
+		if(GetPlayerState(i) == 2)
+		{
+		    TogglePlayerSpeedo(i, true);
+		}
+	}
+	return 1;
+}
+
+public OnFilterScriptExit()
+{
+	for(new x = 0; x < 15; x++)
+	{
+	    TextDrawDestroy(TD[x]);
+	}
+	foreach(new i : Player)
+	{
+	    PlayerTextDrawDestroy(i, pTD[i]);
+	    PlayerTextDrawDestroy(i, pTD2[i]);
+	}
+	return 1;
+}
+
+public OnPlayerConnect(playerid)
+{
+	if(!IsPlayerNPC(playerid))
+	{
+	    pTD[playerid] = CreatePlayerTextDraw(playerid, 533.190368, 323.583282, "");
+		PlayerTextDrawTextSize(playerid, pTD[playerid], 101.000000, 120.000000);
+		PlayerTextDrawAlignment(playerid, pTD[playerid], 1);
+		PlayerTextDrawColor(playerid, pTD[playerid], 0x000000FF);
+		PlayerTextDrawBackgroundColor(playerid, pTD[playerid], 0);
+		PlayerTextDrawSetShadow(playerid, pTD[playerid], 0);
+		PlayerTextDrawFont(playerid, pTD[playerid], 5);
+		PlayerTextDrawSetProportional(playerid, pTD[playerid], 0);
+		PlayerTextDrawSetPreviewModel(playerid, pTD[playerid], 19348);
+		PlayerTextDrawSetPreviewRot(playerid, pTD[playerid], 0.000000, 135.000000, 0.000000, 3.000000);
+		pTD2[playerid] = CreatePlayerTextDraw(playerid, 585.608947, 373.772430, "100");
+		PlayerTextDrawLetterSize(playerid, pTD2[playerid], 0.190095, 0.895999);
+		PlayerTextDrawTextSize(playerid, pTD2[playerid], 0.000000, 14.000000);
+		PlayerTextDrawAlignment(playerid, pTD2[playerid], 2);
+		PlayerTextDrawColor(playerid, pTD2[playerid], -1);
+		PlayerTextDrawUseBox(playerid, pTD2[playerid], 1);
+		PlayerTextDrawBoxColor(playerid, pTD2[playerid], 130);
+		PlayerTextDrawSetShadow(playerid, pTD2[playerid], 0);
+		PlayerTextDrawBackgroundColor(playerid, pTD2[playerid], 255);
+		PlayerTextDrawFont(playerid, pTD2[playerid], 1);
+		PlayerTextDrawSetProportional(playerid, pTD2[playerid], 1);
+	}
+	return 1;
+}
+
+public OnPlayerDisconnect(playerid, reason)
+{
+	if(!IsPlayerNPC(playerid))
+	{
+	    pSpeed[playerid] = 0.0;
+	    PlayerTextDrawDestroy(playerid, pTD[playerid]);
+	    PlayerTextDrawDestroy(playerid, pTD2[playerid]);
+	    pTD[playerid] = PlayerText:0xFFFF;
+	    pTD2[playerid] = PlayerText:0xFFFF;
+	}
+	return 1;
+}
+
+public OnPlayerStateChange(playerid, newstate, oldstate)
+{
+	if(!IsPlayerNPC(playerid))
+	{
+	    if(newstate == 2 && oldstate != 2)
+	    {
+	        TogglePlayerSpeedo(playerid, true);
+	    }
+	    if(newstate != 2 && oldstate == 2)
+	    {
+	        TogglePlayerSpeedo(playerid, false);
+	    }
+	}
+	return 1;
+}
+
+task Speedo[100]()
+{
+	foreach(new i : Player)
+	{
+		if(GetPlayerState(i) != 2) continue;
+		new string[4], Float:speed;
+		speed = GetSpeed(i);
+		if(speed == pSpeed[i]) continue;
+		pSpeed[i] = speed;
+		format(string, 4, "%d", floatround(speed, floatround_round));
+		PlayerTextDrawHide(i, pTD[i]);
+		PlayerTextDrawSetPreviewRot(i, pTD[i], 0.000000, calcrot(i), 0.000000, 3.000000);
+		PlayerTextDrawShow(i, pTD[i]);
+		PlayerTextDrawSetString(i, pTD2[i], string);
+	}
+	return 1;
+}
