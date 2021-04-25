@@ -2,7 +2,7 @@
 #include <foreach>
 #include <YSI\y_timers>
 
-new Float:pSpeed[MAX_PLAYERS] = {0.0,...};
+new Float:pSpeed[MAX_PLAYERS] = {-0.1,...};
 
 new Text:TD[15];
 new PlayerText:pTD[MAX_PLAYERS] = {PlayerText:0xFFFF};
@@ -194,7 +194,7 @@ public OnFilterScriptInit()
 	TextDrawBackgroundColor(TD[14], 255);
 	TextDrawFont(TD[14], 1);
 	TextDrawSetProportional(TD[14], 1);
-	foreach(new i : Player)
+	foreach(new i,Player)
 	{
 	    pTD[i] = CreatePlayerTextDraw(i, 533.190368, 323.583282, "");
 		PlayerTextDrawTextSize(i, pTD[i], 101.000000, 120.000000);
@@ -231,7 +231,7 @@ public OnFilterScriptExit()
 	{
 	    TextDrawDestroy(TD[x]);
 	}
-	foreach(new i : Player)
+	foreach(new i,Player)
 	{
 	    PlayerTextDrawDestroy(i, pTD[i]);
 	    PlayerTextDrawDestroy(i, pTD2[i]);
@@ -272,7 +272,7 @@ public OnPlayerDisconnect(playerid, reason)
 {
 	if(!IsPlayerNPC(playerid))
 	{
-	    pSpeed[playerid] = 0.0;
+	    pSpeed[playerid] = -0.1;
 	    PlayerTextDrawDestroy(playerid, pTD[playerid]);
 	    PlayerTextDrawDestroy(playerid, pTD2[playerid]);
 	    pTD[playerid] = PlayerText:0xFFFF;
@@ -299,7 +299,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 
 task Speedo[100]()
 {
-	foreach(new i : Player)
+	foreach(new i,Player)
 	{
 		if(GetPlayerState(i) != 2) continue;
 		new string[4], Float:speed;
