@@ -177,11 +177,3 @@ public OnPlayerDisconnect(playerid, reason)
     DestroyPlayerLevel(playerid);
 	return 1;
 }
-
-CMD:score(playerid, params[])
-{
-	SetPlayerScore(playerid, strval(params));
-	return 1;
-}
-
-
